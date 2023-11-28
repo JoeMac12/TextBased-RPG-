@@ -43,9 +43,27 @@ namespace TextBased_RPG_
             {
                 for (int j = 0; j < mapWidth; j++)
                 {
+                    SetTextColor(map[i, j]);
                     Console.Write(map[i, j]);
+                    Console.ResetColor();
                 }
                 Console.WriteLine();
+            }
+        }
+
+        static void SetTextColor(char textType) // Color for each text type
+        {
+            switch (textType)
+            {
+                case '`': // Grass
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case '#': // Walls
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                default:
+                    Console.ResetColor();
+                    break;
             }
         }
     }
