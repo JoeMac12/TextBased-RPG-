@@ -12,6 +12,8 @@ namespace TextBased_RPG_
         static char[,] map; // Map properties + Player & enemy
         static int mapHeight; 
         static int mapWidth;
+        static int playerHealth = 20;
+        static int enemyHealth = 10;
         static (int x, int y) playerPosition;
         static (int x, int y) enemyPosition;
         static Random random = new Random(); // For the enemy movement
@@ -22,15 +24,25 @@ namespace TextBased_RPG_
             InitializePlayer();
             InitializeEnemy();
 
-            while (true) // Creats a new map every input. I'll try and fix that later to make it just the one map
+            while (playerHealth > 0) // While the player is alive
             {
                 DisplayMap();
                 PlayerMovement();
-                MoveEnemy();
+                if (enemyHealth > 0) MoveEnemy(); // If enemy is alive, it can move
+
+                if (playerPosition == enemyPosition) // Both take damage if they are in the same spot with eachother, maybe add support to check who move into each other first?
+                {
+                    playerHealth--;
+                    enemyHealth--;
+                    Console.WriteLine("Encountered a enemy! You both took 1 damage");
+                }
+
+                Console.WriteLine($"Player Health: {playerHealth}"); // Simple health hud for now
+                if (enemyHealth <= 0) Console.WriteLine("Enemy has been defeated!"); // Later make sure to remove the enemy when it dies
             }
 
-            //Console.WriteLine("Press any key to exit");
-            //Console.ReadKey(true);
+            Console.WriteLine("Game Over"); // Player dies somehow
+            Console.ReadKey();
         }
 
         static void LoadMap(string fileName) // Load the map text from the map file
