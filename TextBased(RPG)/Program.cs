@@ -9,16 +9,23 @@ namespace TextBased_RPG_
 {
     internal class Program
     {
-        static char[,] map; // Map properties
+        static char[,] map; // Map properties + Player & enemy
         static int mapHeight; 
         static int mapWidth;
+        static (int x, int y) playerPosition;
 
         static void Main(string[] args) // Main 
         {
             LoadMap("mapArea.txt");
-            DisplayMap();
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey(true);
+            InitializePlayer();
+
+            while (true) // Basic support for updating the map for game inputs
+            {
+                DisplayMap();
+            }
+
+            //Console.WriteLine("Press any key to exit");
+            //Console.ReadKey(true);
         }
 
         static void LoadMap(string fileName) // Load the map text from the map file
@@ -43,12 +50,25 @@ namespace TextBased_RPG_
             {
                 for (int j = 0; j < mapWidth; j++)
                 {
-                    SetTextColor(map[i, j]);
-                    Console.Write(map[i, j]);
+                    if (i == playerPosition.y && j == playerPosition.x)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow; // Player Color
+                        Console.Write('0'); // player icon
+                    }
+                    else
+                    {
+                        SetTextColor(map[i, j]);
+                        Console.Write(map[i, j]);
+                    }
                     Console.ResetColor();
                 }
                 Console.WriteLine();
             }
+        }
+
+        static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
+        {
+            playerPosition = (1, 1);
         }
 
         static void SetTextColor(char textType) // Color for each text type
