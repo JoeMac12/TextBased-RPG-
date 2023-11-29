@@ -28,6 +28,8 @@ namespace TextBased_RPG_
             {
                 DisplayMap();
                 PlayerMovement();
+                Console.Clear(); // Clear the old map update
+
                 if (enemyHealth > 0) MoveEnemy(); // If enemy is alive, it can move
 
                 if (playerPosition == enemyPosition) // Both take damage if they are in the same spot with eachother, maybe add support to check who move into each other first?
