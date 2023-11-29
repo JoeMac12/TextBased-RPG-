@@ -13,16 +13,20 @@ namespace TextBased_RPG_
         static int mapHeight; 
         static int mapWidth;
         static (int x, int y) playerPosition;
+        static (int x, int y) enemyPosition;
+        static Random random = new Random(); // For the enemy movement
 
         static void Main(string[] args) // Main 
         {
             LoadMap("mapArea.txt");
             InitializePlayer();
+            InitializeEnemy();
 
             while (true) // Creats a new map every input. I'll try and fix that later to make it just the one map
             {
                 DisplayMap();
                 PlayerMovement();
+                MoveEnemy();
             }
 
             //Console.WriteLine("Press any key to exit");
@@ -54,7 +58,12 @@ namespace TextBased_RPG_
                     if (i == playerPosition.y && j == playerPosition.x)
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow; // Player Color
-                        Console.Write('0'); // player icon
+                        Console.Write('0'); // Player icon
+                    }
+                    else if (i == enemyPosition.y && j == enemyPosition.x)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red; // Enemy Color
+                        Console.Write('X'); // Enemy Icon
                     }
                     else
                     {
@@ -69,7 +78,12 @@ namespace TextBased_RPG_
 
         static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
         {
-            playerPosition = (1, 1);
+            playerPosition = (mapWidth - 40, mapHeight - 20); // Top middle
+        }
+
+        static void InitializeEnemy() // Starting spot of the enemy
+        {
+            enemyPosition = (mapWidth - 40, mapHeight - 10); // Middle
         }
 
         static void PlayerMovement() // Controls for the player movement 
@@ -99,6 +113,26 @@ namespace TextBased_RPG_
             if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
             {
                 playerPosition = (moveX, moveY); // Move the player to the new position
+            }
+        }
+
+        static void MoveEnemy() // Handles the random enemy movement
+        {
+            int direction = random.Next(4); // Make the enemy pick a random direction each time the player moves
+            int x = 0, y = 0;
+            switch (direction)
+            {
+                case 0: y = -1; break; // Move up
+                case 1: y = 1; break; // Move Down
+                case 2: x = -1; break; // Move left
+                case 3: x = 1; break; // Move right
+            }
+
+            int moveX = enemyPosition.x + x;
+            int moveY = enemyPosition.y + y;
+            if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
+            {
+                enemyPosition = (moveX, moveY);
             }
         }
 
