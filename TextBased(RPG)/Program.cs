@@ -68,13 +68,13 @@ namespace TextBased_RPG_
                 {
                     if (i == playerPosition.y && j == playerPosition.x)
                     {
-                        Console.ForegroundColor = ConsoleColor.Yellow; // Player Color
-                        Console.Write('0'); // Player icon
+                        Console.ForegroundColor = ConsoleColor.DarkBlue; // Player Color
+                        Console.Write('█'); // Player icon
                     }
                     else if (i == enemyPosition.y && j == enemyPosition.x)
                     {
                         Console.ForegroundColor = ConsoleColor.Red; // Enemy Color
-                        Console.Write('X'); // Enemy Icon
+                        Console.Write('█'); // Enemy Icon
                     }
                     else
                     {
@@ -102,7 +102,7 @@ namespace TextBased_RPG_
 
         static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
         {
-            playerPosition = (mapWidth - 40, mapHeight - 20); // Top middle
+            playerPosition = (mapWidth - 40, mapHeight - 15); // Top middle
         }
 
         static void InitializeEnemy() // Starting spot of the enemy
@@ -139,7 +139,7 @@ namespace TextBased_RPG_
                 enemyHealth--; // Enemy takes 1 damage
                 Console.WriteLine("You attacked the enemy!");
             }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '▓') // Check if it's a wall
             {
                 playerPosition = (moveX, moveY); // Move the player to the new position
             }
@@ -164,7 +164,7 @@ namespace TextBased_RPG_
                 playerHealth--; // Player takes 1 damage
                 Console.WriteLine("The enemy attacked you!");
             }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '▓') // Check if it's a wall
             {
                 enemyPosition = (moveX, moveY);
             }
@@ -174,11 +174,11 @@ namespace TextBased_RPG_
         {
             switch (textType)
             {
-                case '`': // Grass
-                    Console.ForegroundColor = ConsoleColor.Green;
+                case '█': // Grass
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
                     break;
-                case '#': // Walls
-                    Console.ForegroundColor = ConsoleColor.Red;
+                case '▓': // Walls
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
                 default:
                     Console.ResetColor();
