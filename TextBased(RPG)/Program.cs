@@ -32,13 +32,6 @@ namespace TextBased_RPG_
 
                 if (enemyHealth > 0) MoveEnemy(); // If enemy is alive, it can move
 
-                if (playerPosition == enemyPosition) // Both take damage if they are in the same spot with eachother, maybe add support to check who move into each other first?
-                {
-                    playerHealth--;
-                    enemyHealth--;
-                    Console.WriteLine("Encountered a enemy! You both took 1 damage");
-                }
-
                 Console.WriteLine($"Player Health: {playerHealth}"); // Simple health hud for now
                 if (enemyHealth <= 0) Console.WriteLine("Enemy has been defeated!"); // Later make sure to remove the enemy when it dies
             }
@@ -141,7 +134,12 @@ namespace TextBased_RPG_
         {
             int moveX = playerPosition.x + x;
             int moveY = playerPosition.y + y;
-            if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
+            if (moveX == enemyPosition.x && moveY == enemyPosition.y)
+            {
+                enemyHealth--; // Enemy takes 1 damage
+                Console.WriteLine("You attacked the enemy!");
+            }
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
             {
                 playerPosition = (moveX, moveY); // Move the player to the new position
             }
@@ -161,7 +159,12 @@ namespace TextBased_RPG_
 
             int moveX = enemyPosition.x + x;
             int moveY = enemyPosition.y + y;
-            if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
+            if (moveX == playerPosition.x && moveY == playerPosition.y)
+            {
+                playerHealth--; // Player takes 1 damage
+                Console.WriteLine("The enemy attacked you!");
+            }
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '#') // Check if it's a wall
             {
                 enemyPosition = (moveX, moveY);
             }
