@@ -63,10 +63,14 @@ namespace TextBased_RPG_
             }
         }
 
-        static void DisplayMap() // Display the map text
+        static void DisplayMap() // Display the map text and border
         {
+            DrawBorder(); // Top border
+
             for (int i = 0; i < mapHeight; i++)
             {
+                Console.Write("|"); // Left border
+
                 for (int j = 0; j < mapWidth; j++)
                 {
                     if (i == playerPosition.y && j == playerPosition.x)
@@ -86,8 +90,21 @@ namespace TextBased_RPG_
                     }
                     Console.ResetColor();
                 }
-                Console.WriteLine();
+
+                Console.WriteLine("|"); // Right border
             }
+
+            DrawBorder(); // Bottom border
+        }
+
+        static void DrawBorder() // Draw a border around the map so it looks nicer
+        {
+            Console.Write("+");
+            for (int i = 0; i < mapWidth; i++)
+            {
+                Console.Write("-");
+            }
+            Console.WriteLine("+");
         }
 
         static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
