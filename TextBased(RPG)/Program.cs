@@ -34,7 +34,7 @@ namespace TextBased_RPG_
             InitializePlayer();
             InitializeEnemy();
 
-            while (playerHealth >= 0) // While the player is alive
+            while (playerHealth > 0) // While the player is alive
             {
                 Console.Clear(); // Clear the old map update
                 DisplayMap();
@@ -51,6 +51,7 @@ namespace TextBased_RPG_
 
                 if (Win())
                 {
+                    Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Congratulations! You have collected all 10 gold coins!");
                     Console.WriteLine();
@@ -279,7 +280,7 @@ namespace TextBased_RPG_
                 case '#': // Walls
                 case '|': 
                 case '-': 
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
                     break;
                 case 'Θ': // Gold
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
