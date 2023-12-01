@@ -62,11 +62,17 @@ namespace TextBased_RPG_
         static void DisplayHUD()
         {
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Player Health: {playerHealth}");
+            Console.ResetColor();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"Gold: {goldScore} / 10");
+            Console.ResetColor();
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Action: {actionMessage}");
+            Console.ResetColor();
         }
 
         static void DisplayMap() // Display the map text and border
