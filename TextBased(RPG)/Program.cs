@@ -21,6 +21,11 @@ namespace TextBased_RPG_
 
         static bool playerMoved = false;
 
+        static bool Win()
+        {
+            return goldScore >= 10; // Check if player has 10 coins
+        }
+
         static string actionMessage = ""; // Action text
 
         static void Main(string[] args) // Main 
@@ -42,6 +47,13 @@ namespace TextBased_RPG_
                 if (playerMoved && enemyHealth > 0) // If enemy is alive and player has moved, it can move
                 {
                     MoveEnemy();
+                }
+
+                if (Win())
+                {
+                    Console.WriteLine("Congratulations! You have collected all 10 gold coins!");
+                    Console.ReadKey();
+                    return; // Close game
                 }
             }
 
