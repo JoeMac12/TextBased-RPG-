@@ -101,6 +101,11 @@ namespace TextBased_RPG_
             Console.WriteLine("+");
         }
 
+        static bool WithinBounds(int x, int y)
+        {
+            return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+        }
+
         static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
         {
             playerPosition = (mapWidth - 78, mapHeight - 19); // Top left
@@ -135,19 +140,23 @@ namespace TextBased_RPG_
         {
             int moveX = playerPosition.x + x;
             int moveY = playerPosition.y + y;
-            if (map[moveY, moveX] == 'Θ') // Check if it's gold
+
+            if (WithinBounds(moveX, moveY))
             {
-                goldScore++; // Increase gold by 1
-                map[moveY, moveX] = '.'; // Readd background
-            }
-            else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
-            {
-                enemyHealth--; // Enemy takes 1 damage
-                Console.WriteLine("You attacked the enemy!");
-            }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
-            {
-                playerPosition = (moveX, moveY); // Move the player to the new position
+                if (map[moveY, moveX] == 'Θ') // Check if it's gold
+                {
+                    goldScore++; // Increase gold by 1
+                    map[moveY, moveX] = '.'; // Readd background
+                }
+                else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
+                {
+                    enemyHealth--; // Enemy takes 1 damage
+                    Console.WriteLine("You attacked the enemy!");
+                }
+                else if (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // Check if it's a wall
+                {
+                    playerPosition = (moveX, moveY); // Move the player
+                }
             }
         }
 
