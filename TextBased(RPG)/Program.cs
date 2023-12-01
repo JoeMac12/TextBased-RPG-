@@ -19,25 +19,27 @@ namespace TextBased_RPG_
         static (int x, int y) enemyPosition;
         static Random random = new Random(); // For the enemy movement
 
+        static string actionMessage = "";
+
         static void Main(string[] args) // Main 
         {
             LoadMap("mapArea.txt");
             InitializePlayer();
             InitializeEnemy();
 
-            while (playerHealth > 0) // While the player is alive
+            while (playerHealth >= 0) // While the player is alive
             {
-                DisplayMap();
-                PlayerMovement();
                 Console.Clear(); // Clear the old map update
+                DisplayMap();
+                DisplayHUD();
+                PlayerMovement();
 
                 if (enemyHealth > 0) MoveEnemy(); // If enemy is alive, it can move
 
-                Console.WriteLine($"Player Health: {playerHealth}"); // Simple health hud for now
-                if (enemyHealth <= 0) Console.WriteLine("Enemy has been defeated!"); // Later make sure to remove the enemy when it dies
+                if (enemyHealth <= 0) actionMessage = "The enemy has been killed!";
             }
 
-            Console.WriteLine("Game Over"); // Player dies somehow
+            Console.WriteLine("You have Died"); // Player dies somehow
             Console.ReadKey();
         }
 
@@ -55,6 +57,16 @@ namespace TextBased_RPG_
                     map[i, j] = lines[i][j];
                 }
             }
+        }
+
+        static void DisplayHUD()
+        {
+            Console.WriteLine();
+            Console.WriteLine($"Player Health: {playerHealth}");
+            Console.WriteLine();
+            Console.WriteLine($"Gold: {goldScore} / 10");
+            Console.WriteLine();
+            Console.WriteLine($"Action: {actionMessage}");
         }
 
         static void DisplayMap() // Display the map text and border
@@ -141,26 +153,26 @@ namespace TextBased_RPG_
             int moveX = playerPosition.x + x;
             int moveY = playerPosition.y + y;
 
-            if (WithinBounds(moveX, moveY))
+            if (WithinBounds(moveX, moveY) && map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // Check if it's a wall
             {
                 if (map[moveY, moveX] == 'Θ') // Check if it's gold
                 {
                     goldScore++; // Increase gold by 1
                     map[moveY, moveX] = '.'; // Readd background
-                }
-                else if (map[moveY, moveX] == '~') // Acid check
-                {
-                    playerHealth--; // Player takes 1 damage
-                    Console.WriteLine("You stepped on acid and took damage!");
+                    actionMessage = "You collected a gold coin!";
                 }
                 else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
                 {
                     enemyHealth--; // Enemy takes 1 damage
-                    Console.WriteLine("You attacked the enemy!");
+                    actionMessage = "You attacked the enemy for 1 damage!";
                 }
-                else if (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // Check if it's a wall
+
+                playerPosition = (moveX, moveY); // Move the player
+
+                if (map[moveY, moveX] == '~') // Acid
                 {
-                    playerPosition = (moveX, moveY); // Move the player
+                    playerHealth--; // Player takes 1 damage
+                    actionMessage = "You have stepped in acid and took 1 damage!";
                 }
             }
         }
@@ -182,7 +194,7 @@ namespace TextBased_RPG_
             if (moveX == playerPosition.x && moveY == playerPosition.y)
             {
                 playerHealth--; // Player takes 1 damage
-                Console.WriteLine("The enemy attacked you!");
+                actionMessage = "The enemy attacked you for 1 damage!";
             }
             else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
             {
