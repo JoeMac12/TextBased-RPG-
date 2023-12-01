@@ -191,22 +191,25 @@ namespace TextBased_RPG_
 
             if (WithinBounds(moveX, moveY) && map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // Check if it's a wall
             {
-                if (map[moveY, moveX] == 'Θ') // Check if it's gold
+                if (moveX == enemyPosition.x && moveY == enemyPosition.y)
                 {
-                    goldScore++; // Increase gold by 1
-                    map[moveY, moveX] = '.'; // Readd background
-                    actionMessage = "You collected a gold coin!";
+                    PlayerAttack(); // Attack the enemy but does not cause a move
                 }
-                else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
+                else
                 {
-                    PlayerAttack();
-                }
+                    if (map[moveY, moveX] == 'Θ') // Check if it's gold
+                    {
+                        goldScore++;
+                        map[moveY, moveX] = '.';
+                        actionMessage = "You collected a gold coin!";
+                    }
 
-                playerPosition = (moveX, moveY); // Move the player
+                    playerPosition = (moveX, moveY); // Move the player if not attacking
 
-                if (map[moveY, moveX] == '~') // Acid
-                {
-                    AcidDamage();
+                    if (map[moveY, moveX] == '~')
+                    {
+                        AcidDamage();
+                    }
                 }
             }
         }
@@ -215,6 +218,7 @@ namespace TextBased_RPG_
         {
             int direction = random.Next(4); // Make the enemy pick a random direction each time the player moves
             int x = 0, y = 0;
+
             switch (direction)
             {
                 case 0: y = -1; break; // Move up
@@ -228,7 +232,7 @@ namespace TextBased_RPG_
 
             if (moveX == playerPosition.x && moveY == playerPosition.y)
             {
-                EnemyAttack();
+                EnemyAttack(); // Attack the player but does not cause a move
             }
             else if (WithinBounds(moveX, moveY) && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
             {
