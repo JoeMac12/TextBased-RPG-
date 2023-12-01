@@ -85,7 +85,7 @@ namespace TextBased_RPG_
             }
         }
 
-        static void DisplayHUD()
+        static void DisplayHUD() // Displays the stats of everything
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -116,7 +116,7 @@ namespace TextBased_RPG_
                 {
                     if (i == playerPosition.y && j == playerPosition.x)
                     {
-                        Console.ForegroundColor = ConsoleColor.DarkBlue; // Player Color
+                        Console.ForegroundColor = ConsoleColor.Green; // Player Color
                         Console.Write('█'); // Player icon
                     }
                     else if (enemyHealth > 0 && i == enemyPosition.y && j == enemyPosition.x)
@@ -193,18 +193,22 @@ namespace TextBased_RPG_
             switch (keyInfo.Key)
             {
                 case ConsoleKey.W:
+                case ConsoleKey.UpArrow:
                     MovePlayer(0, -1); // Up 1 unit
                     playerMoved = true;
                     break;
                 case ConsoleKey.S:
+                case ConsoleKey.DownArrow:
                     MovePlayer(0, 1); // Down 1 unit
                     playerMoved = true;
                     break;
                 case ConsoleKey.A:
+                case ConsoleKey.LeftArrow:
                     MovePlayer(-1, 0); // Left 1 unit
                     playerMoved = true;
                     break;
                 case ConsoleKey.D:
+                case ConsoleKey.RightArrow:
                     MovePlayer(1, 0); // Right 1 unit
                     playerMoved = true;
                     break;
@@ -271,7 +275,7 @@ namespace TextBased_RPG_
         {
             switch (textType)
             {
-                case '.': // Grass
+                case '.': // Floor
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
                 case '~': // Acid
