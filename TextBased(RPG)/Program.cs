@@ -102,12 +102,12 @@ namespace TextBased_RPG_
 
         static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
         {
-            playerPosition = (mapWidth - 40, mapHeight - 15); // Top middle
+            playerPosition = (mapWidth - 78, mapHeight - 19); // Top left
         }
 
         static void InitializeEnemy() // Starting spot of the enemy
         {
-            enemyPosition = (mapWidth - 40, mapHeight - 10); // Middle
+            enemyPosition = (mapWidth - 50, mapHeight - 3); // Middle
         }
 
         static void PlayerMovement() // Controls for the player movement 
@@ -139,7 +139,7 @@ namespace TextBased_RPG_
                 enemyHealth--; // Enemy takes 1 damage
                 Console.WriteLine("You attacked the enemy!");
             }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '▓') // Check if it's a wall
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
             {
                 playerPosition = (moveX, moveY); // Move the player to the new position
             }
@@ -164,7 +164,7 @@ namespace TextBased_RPG_
                 playerHealth--; // Player takes 1 damage
                 Console.WriteLine("The enemy attacked you!");
             }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && map[moveY, moveX] != '▓') // Check if it's a wall
+            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
             {
                 enemyPosition = (moveX, moveY);
             }
@@ -174,11 +174,19 @@ namespace TextBased_RPG_
         {
             switch (textType)
             {
-                case '█': // Grass
+                case '.': // Grass
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    break;
+                case '~': // Acid
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     break;
-                case '▓': // Walls
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                case '#': // Walls
+                case '|': 
+                case '-': 
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    break;
+                case 'Θ': // Gold
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     break;
                 default:
                     Console.ResetColor();
