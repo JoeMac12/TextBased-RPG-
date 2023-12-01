@@ -43,8 +43,6 @@ namespace TextBased_RPG_
                 {
                     MoveEnemy();
                 }
-
-                if (enemyHealth <= 0) actionMessage = "The enemy has been killed!";
             }
 
             Console.WriteLine("You have Died"); // Player dies somehow
@@ -73,6 +71,9 @@ namespace TextBased_RPG_
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Player Health: {playerHealth}");
             Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Enemy Health: {enemyHealth}");
+            Console.ResetColor();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"Gold: {goldScore} / 10");
@@ -98,7 +99,7 @@ namespace TextBased_RPG_
                         Console.ForegroundColor = ConsoleColor.DarkBlue; // Player Color
                         Console.Write('█'); // Player icon
                     }
-                    else if (i == enemyPosition.y && j == enemyPosition.x)
+                    else if (enemyHealth > 0 && i == enemyPosition.y && j == enemyPosition.x)
                     {
                         Console.ForegroundColor = ConsoleColor.Red; // Enemy Color
                         Console.Write('█'); // Enemy Icon
@@ -146,6 +147,12 @@ namespace TextBased_RPG_
         {
             enemyHealth--; // Enemy takes 1 damage
             actionMessage = "You attacked the enemy for 1 damage!";
+
+            if (enemyHealth <= 0)
+            {
+                enemyPosition = (-1, -1); // Remove the enemy of the map when killed
+                actionMessage = "The enemy has been killed!";
+            }
         }
 
         static void EnemyAttack() // Enemy attacking
