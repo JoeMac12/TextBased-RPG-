@@ -14,6 +14,7 @@ namespace TextBased_RPG_
         static int mapWidth;
         static int playerHealth = 20;
         static int enemyHealth = 10;
+        static int goldScore = 0;
         static (int x, int y) playerPosition;
         static (int x, int y) enemyPosition;
         static Random random = new Random(); // For the enemy movement
@@ -134,7 +135,12 @@ namespace TextBased_RPG_
         {
             int moveX = playerPosition.x + x;
             int moveY = playerPosition.y + y;
-            if (moveX == enemyPosition.x && moveY == enemyPosition.y)
+            if (map[moveY, moveX] == 'Θ') // Check if it's gold
+            {
+                goldScore++; // Increase gold by 1
+                map[moveY, moveX] = '.'; // Readd background
+            }
+            else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
             {
                 enemyHealth--; // Enemy takes 1 damage
                 Console.WriteLine("You attacked the enemy!");
