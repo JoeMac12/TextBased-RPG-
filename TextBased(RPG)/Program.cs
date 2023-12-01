@@ -148,6 +148,11 @@ namespace TextBased_RPG_
                     goldScore++; // Increase gold by 1
                     map[moveY, moveX] = '.'; // Readd background
                 }
+                else if (map[moveY, moveX] == '~') // Acid check
+                {
+                    playerHealth--; // Player takes 1 damage
+                    Console.WriteLine("You stepped on acid and took damage!");
+                }
                 else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
                 {
                     enemyHealth--; // Enemy takes 1 damage
