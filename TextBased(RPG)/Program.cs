@@ -19,6 +19,8 @@ namespace TextBased_RPG_
         static (int x, int y) enemyPosition;
         static Random random = new Random(); // For the enemy movement
 
+        static bool playerMoved = false;
+
         static string actionMessage = ""; // Action text
 
         static void Main(string[] args) // Main 
@@ -32,9 +34,15 @@ namespace TextBased_RPG_
                 Console.Clear(); // Clear the old map update
                 DisplayMap();
                 DisplayHUD();
+
+                playerMoved = false;
+
                 PlayerMovement();
 
-                if (enemyHealth > 0) MoveEnemy(); // If enemy is alive, it can move
+                if (playerMoved && enemyHealth > 0) // If enemy is alive and player has moved, it can move
+                {
+                    MoveEnemy();
+                }
 
                 if (enemyHealth <= 0) actionMessage = "The enemy has been killed!";
             }
@@ -159,15 +167,19 @@ namespace TextBased_RPG_
             {
                 case ConsoleKey.W:
                     MovePlayer(0, -1); // Up 1 unit
+                    playerMoved = true;
                     break;
                 case ConsoleKey.S:
                     MovePlayer(0, 1); // Down 1 unit
+                    playerMoved = true;
                     break;
                 case ConsoleKey.A:
                     MovePlayer(-1, 0); // Left 1 unit
+                    playerMoved = true;
                     break;
                 case ConsoleKey.D:
                     MovePlayer(1, 0); // Right 1 unit
+                    playerMoved = true;
                     break;
             }
         }
