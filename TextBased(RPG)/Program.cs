@@ -9,7 +9,7 @@ namespace TextBased_RPG_
 {
     internal class Program
     {
-        static char[,] map; // Map properties + Player & enemy
+        static char[,] map; // All main variables for the game
         static int mapHeight; 
         static int mapWidth;
         static int playerHealth = 20;
@@ -17,39 +17,39 @@ namespace TextBased_RPG_
         static int goldScore = 0;
         static (int x, int y) playerPosition;
         static (int x, int y) enemyPosition;
-        static Random random = new Random(); // For the enemy movement
+        static Random random = new Random(); // Used for the enemy movement
 
-        static bool playerMoved = false;
+        static bool playerMoved = false; // Used for checking if the user has pressed a key that moves the player
 
         static bool Win()
         {
-            return goldScore >= 10; // Check if player has 10 coins
+            return goldScore >= 10; // Checks if the player has collected 10 gold coins
         }
 
-        static string actionMessage = ""; // Action text
+        static string actionMessage = ""; // Used for displaying game info to the player
 
-        static void Main(string[] args) // Main 
+        static void Main(string[] args) // Main call
         {
             LoadMap("mapArea.txt");
             InitializePlayer();
             InitializeEnemy();
 
-            while (playerHealth > 0) // While the player is alive
+            while (playerHealth > 0) // Game runs if the player has health
             {
-                Console.Clear(); // Clear the old map update
+                Console.Clear(); // Used for clearing the old map to keep the console clean every input
                 DisplayMap();
                 DisplayHUD();
 
-                playerMoved = false;
+                playerMoved = false; // Set to false on first loadup 
 
                 PlayerMovement();
 
-                if (playerMoved && enemyHealth > 0) // If enemy is alive and player has moved, it can move
+                if (playerMoved && enemyHealth > 0) // Checks if the player has moved and the enemy has health
                 {
                     MoveEnemy();
                 }
 
-                if (Win())
+                if (Win()) // Called when gold score has reached 10 / 10
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -58,18 +58,18 @@ namespace TextBased_RPG_
                     Console.WriteLine("You win!");
                     Console.ResetColor();
                     Console.ReadKey();
-                    return; // Close game
+                    return; // Close the game
                 }
             }
 
-            Console.Clear();
+            Console.Clear(); // Everything else is called if the player dies to the enemy or acid 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("You have Died"); // Player dies somehow
+            Console.WriteLine("You have Died");
             Console.ResetColor();
             Console.ReadKey();
         }
 
-        static void LoadMap(string fileName) // Load the map text from the map file
+        static void LoadMap(string fileName) // Loads the map text from the map file
         {
             string[] lines = File.ReadAllLines(fileName);
             mapHeight = lines.Length;
@@ -116,17 +116,17 @@ namespace TextBased_RPG_
                 {
                     if (i == playerPosition.y && j == playerPosition.x)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green; // Player Color
+                        Console.ForegroundColor = ConsoleColor.Green; // Player color
                         Console.Write('█'); // Player icon
                     }
                     else if (enemyHealth > 0 && i == enemyPosition.y && j == enemyPosition.x)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red; // Enemy Color
-                        Console.Write('█'); // Enemy Icon
+                        Console.ForegroundColor = ConsoleColor.Red; // Enemy color
+                        Console.Write('█'); // Enemy icon
                     }
                     else
                     {
-                        SetTextColor(map[i, j]);
+                        SetTextColor(map[i, j]); // Used for setting the color for each map text type
                         Console.Write(map[i, j]);
                     }
                     Console.ResetColor();
@@ -138,7 +138,7 @@ namespace TextBased_RPG_
             DrawBorder(); // Bottom border
         }
 
-        static void DrawBorder() // Draw a border around the map so it looks nicer
+        static void DrawBorder() // Draws a simple border for the top and bottem of the map
         {
             Console.Write("+");
             for (int i = 0; i < mapWidth; i++)
@@ -148,43 +148,43 @@ namespace TextBased_RPG_
             Console.WriteLine("+");
         }
 
-        static bool WithinBounds(int x, int y)
+        static bool WithinBounds(int x, int y) // Used for checking if the player or enemy is within the map border so that they can't leave
         {
             return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
         }
 
-        static void InitializePlayer() // Starting spot of the player, maybe add random starting spot later?
+        static void InitializePlayer() // Starting spot of the player
         {
-            playerPosition = (mapWidth - 78, mapHeight - 19); // Top left
+            playerPosition = (mapWidth - 78, mapHeight - 19); // Top left of map
         }
 
         static void InitializeEnemy() // Starting spot of the enemy
         {
-            enemyPosition = (mapWidth - 50, mapHeight - 3); // Middle
+            enemyPosition = (mapWidth - 50, mapHeight - 3); // Middle bottem of map
         }
 
-        static void PlayerAttack() // Player attacking
+        static void PlayerAttack() // Player attacking enemy
         {
             enemyHealth--; // Enemy takes 1 damage
             actionMessage = "You attacked the enemy for 1 damage!";
 
-            if (enemyHealth <= 0)
+            if (enemyHealth <= 0) // Move the enemy outside the map when it dies
             {
-                enemyPosition = (-1, -1); // Remove the enemy of the map when killed
+                enemyPosition = (-1, -1); 
                 actionMessage = "The enemy has been killed!";
             }
         }
 
-        static void EnemyAttack() // Enemy attacking
+        static void EnemyAttack() // Enemy attacking player
         {
             playerHealth--; // Player takes 1 damage
             actionMessage = "The enemy attacked you for 1 damage!";
         }
 
-        static void AcidDamage() // Acid damage
+        static void AcidDamage() // Acid damage for puddle
         {
             playerHealth--; // Player takes 1 damage
-            actionMessage = "You have stepped in acid and took 1 damage!";
+            actionMessage = "You stepped in acid and took 1 damage!";
         }
 
         static void PlayerMovement() // Controls for the player movement 
@@ -215,39 +215,39 @@ namespace TextBased_RPG_
             }
         }
 
-        static void MovePlayer(int x, int y) // Handles where the player moves to on the map
+        static void MovePlayer(int x, int y) // Main handler for the player
         {
             int moveX = playerPosition.x + x;
             int moveY = playerPosition.y + y;
 
-            if (WithinBounds(moveX, moveY) && map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // Check if it's a wall
+            if (WithinBounds(moveX, moveY) && map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-') // If not a wall, the player can move
             {
                 if (moveX == enemyPosition.x && moveY == enemyPosition.y)
                 {
-                    PlayerAttack(); // Attack the enemy but does not cause a move
+                    PlayerAttack(); // Player attacks the enemy but does not move in the process
                 }
                 else
                 {
-                    if (map[moveY, moveX] == 'Θ') // Check if it's gold
+                    if (map[moveY, moveX] == 'Θ') // Check if it's gold and updates gold score
                     {
                         goldScore++;
-                        map[moveY, moveX] = '.';
+                        map[moveY, moveX] = '.'; // Replace the gold text with the background text
                         actionMessage = "You collected a gold coin!";
                     }
 
-                    playerPosition = (moveX, moveY); // Move the player if not attacking
+                    playerPosition = (moveX, moveY); // Move the player as normal if not attacking
 
                     if (map[moveY, moveX] == '~')
                     {
-                        AcidDamage();
+                        AcidDamage(); // Player takes damage if they are standing on acid
                     }
                 }
             }
         }
 
-        static void MoveEnemy() // Handles the random enemy movement
+        static void MoveEnemy() // Handles the enemy movement
         {
-            int direction = random.Next(4); // Make the enemy pick a random direction each time the player moves
+            int direction = random.Next(4); // Makes the enemy pick a random direction each time the player moves
             int x = 0, y = 0;
 
             switch (direction)
@@ -263,19 +263,19 @@ namespace TextBased_RPG_
 
             if (moveX == playerPosition.x && moveY == playerPosition.y)
             {
-                EnemyAttack(); // Attack the player but does not cause a move
+                EnemyAttack(); // Enemy attacks the player but does not move in the process
             }
-            else if (WithinBounds(moveX, moveY) && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
+            else if (WithinBounds(moveX, moveY) && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // If not a wall, the enemy can move
             {
-                enemyPosition = (moveX, moveY); // Move enemy if not attacking
+                enemyPosition = (moveX, moveY); // Move the enemy as normal if not attacking
             }
         }
 
-        static void SetTextColor(char textType) // Color for each text type
+        static void SetTextColor(char textType) // Used for setting the color for each text type
         {
             switch (textType)
             {
-                case '.': // Floor
+                case '.': // Floor / Background
                     Console.ForegroundColor = ConsoleColor.Black;
                     break;
                 case '~': // Acid
