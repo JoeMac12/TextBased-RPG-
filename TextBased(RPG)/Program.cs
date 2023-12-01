@@ -19,7 +19,7 @@ namespace TextBased_RPG_
         static (int x, int y) enemyPosition;
         static Random random = new Random(); // For the enemy movement
 
-        static string actionMessage = "";
+        static string actionMessage = ""; // Action text
 
         static void Main(string[] args) // Main 
         {
@@ -70,7 +70,7 @@ namespace TextBased_RPG_
             Console.WriteLine($"Gold: {goldScore} / 10");
             Console.ResetColor();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"Action: {actionMessage}");
             Console.ResetColor();
         }
@@ -134,6 +134,24 @@ namespace TextBased_RPG_
             enemyPosition = (mapWidth - 50, mapHeight - 3); // Middle
         }
 
+        static void PlayerAttack() // Player attacking
+        {
+            enemyHealth--; // Enemy takes 1 damage
+            actionMessage = "You attacked the enemy for 1 damage!";
+        }
+
+        static void EnemyAttack() // Enemy attacking
+        {
+            playerHealth--; // Player takes 1 damage
+            actionMessage = "The enemy attacked you for 1 damage!";
+        }
+
+        static void AcidDamage() // Acid damage
+        {
+            playerHealth--; // Player takes 1 damage
+            actionMessage = "You have stepped in acid and took 1 damage!";
+        }
+
         static void PlayerMovement() // Controls for the player movement 
         {
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
@@ -169,16 +187,14 @@ namespace TextBased_RPG_
                 }
                 else if (moveX == enemyPosition.x && moveY == enemyPosition.y)
                 {
-                    enemyHealth--; // Enemy takes 1 damage
-                    actionMessage = "You attacked the enemy for 1 damage!";
+                    PlayerAttack();
                 }
 
                 playerPosition = (moveX, moveY); // Move the player
 
                 if (map[moveY, moveX] == '~') // Acid
                 {
-                    playerHealth--; // Player takes 1 damage
-                    actionMessage = "You have stepped in acid and took 1 damage!";
+                    AcidDamage();
                 }
             }
         }
@@ -190,21 +206,21 @@ namespace TextBased_RPG_
             switch (direction)
             {
                 case 0: y = -1; break; // Move up
-                case 1: y = 1; break; // Move Down
+                case 1: y = 1; break; // Move down
                 case 2: x = -1; break; // Move left
                 case 3: x = 1; break; // Move right
             }
 
             int moveX = enemyPosition.x + x;
             int moveY = enemyPosition.y + y;
+
             if (moveX == playerPosition.x && moveY == playerPosition.y)
             {
-                playerHealth--; // Player takes 1 damage
-                actionMessage = "The enemy attacked you for 1 damage!";
+                EnemyAttack();
             }
-            else if (moveX >= 0 && moveX < mapWidth && moveY >= 0 && moveY < mapHeight && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
+            else if (WithinBounds(moveX, moveY) && (map[moveY, moveX] != '#' && map[moveY, moveX] != '|' && map[moveY, moveX] != '-')) // Check if it's a wall
             {
-                enemyPosition = (moveX, moveY);
+                enemyPosition = (moveX, moveY); // Move enemy if not attacking
             }
         }
 
@@ -221,7 +237,7 @@ namespace TextBased_RPG_
                 case '#': // Walls
                 case '|': 
                 case '-': 
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     break;
                 case 'Θ': // Gold
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
