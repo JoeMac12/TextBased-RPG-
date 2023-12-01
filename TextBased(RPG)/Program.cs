@@ -51,13 +51,20 @@ namespace TextBased_RPG_
 
                 if (Win())
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Congratulations! You have collected all 10 gold coins!");
+                    Console.WriteLine();
+                    Console.WriteLine("You win!");
+                    Console.ResetColor();
                     Console.ReadKey();
                     return; // Close game
                 }
             }
 
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("You have Died"); // Player dies somehow
+            Console.ResetColor();
             Console.ReadKey();
         }
 
